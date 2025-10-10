@@ -1,0 +1,14 @@
+# Flutter/Dart specific
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.vscode/
+.idea/
+*.iml
+*.lock
+build/
+.DS_Store
+.env
+.env.local
+.env.*.local
