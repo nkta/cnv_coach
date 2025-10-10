@@ -4,6 +4,7 @@ import 'package:cnv_coach/presentation/screens/entry_flow/2_feeling_screen.dart'
 import 'package:cnv_coach/presentation/screens/entry_flow/3_need_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/4_demand_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/5_summary_screen.dart';
+import 'package:cnv_coach/presentation/screens/exercises/fact_sorting_screen.dart';
 import 'package:cnv_coach/presentation/widgets/main_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -91,6 +92,11 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/journal/add/summary',
       builder: (context, state) => const SummaryScreen(),
+    ),
+    // --- Exercices ---
+    GoRoute(
+      path: '/exercises/fact_sorting',
+      builder: (context, state) => const FactSortingScreen(),
     ),
   ],
 );
