@@ -54,15 +54,15 @@ cnv_coach/
 
 L'application s'appuie sur les technologies suivantes :
 
-*   **Flutter** : Framework UI de Google pour construire des applications natives multiplateformes à partir d'une seule base de code.
-*   **Dart** : Langage de programmation orienté objet utilisé par Flutter.
-*   **GoRouter** (`go_router`) : Solution de routage déclarative pour Flutter, facilitant la navigation complexe et la gestion des URL.
-*   **Flutter Riverpod** (`flutter_riverpod`) : Framework de gestion d'état réactif et sûr, offrant une alternative aux autres solutions de gestion d'état.
-*   **Hive** (`hive`, `hive_flutter`) : Base de données NoSQL légère et rapide pour le stockage local des données. Idéal pour les applications hors ligne ou pour la persistance rapide.
-*   **Hive Generator** (`hive_generator`) : Outil de génération de code pour Hive, permettant de créer automatiquement les adaptateurs pour les modèles de données.
-*   **Lucide Icons** (`lucide_icons`) : Bibliothèque d'icônes vectorielles modernes et personnalisables.
-*   **uuid** (`uuid`) : Générateur d'identifiants uniques universels (UUID).
-*   **intl** (`intl`) : Package pour l'internationalisation et la localisation (non encore pleinement utilisé, mais présent pour de futures extensions).
+*   **Flutter** : Framework UI multiplateforme.
+*   **Dart** : Langage de programmation de Flutter.
+*   **GoRouter** (`go_router`) : Gestionnaire de navigation déclaratif.
+*   **Flutter Riverpod** (`flutter_riverpod`) : Gestionnaire d'état réactif.
+*   **Hive** (`hive`, `hive_flutter`) : Base de données locale rapide.
+*   **Hive Generator** (`hive_generator`) : Générateur d'adaptateurs Hive.
+*   **Lucide Icons** (`lucide_icons`) : Bibliothèque d'icônes vectorielles.
+*   **uuid** (`uuid`) : Générateur d'identifiants uniques.
+*   **intl** (`intl`) : Outil d'internationalisation.
 
 ## 4. Architecture de l'application
 
