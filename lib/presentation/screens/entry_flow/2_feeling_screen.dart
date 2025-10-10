@@ -53,15 +53,15 @@ class FeelingScreen extends ConsumerWidget {
                             spacing: 8.0,
                             runSpacing: 4.0,
                             children: feelings.map((feeling) {
-                              final isSelected = selectedFeelings.contains(feeling);
+                              final isSelected = selectedFeelings.contains(feeling['name']!);
                               return ChoiceChip(
-                                label: Text(feeling),
+                                label: Text(feeling['name']!),
                                 selected: isSelected,
                                 onSelected: (selected) {
                                   if (selected) {
-                                    notifier.addFeeling(feeling);
+                                    notifier.addFeeling(feeling['name']!);
                                   } else {
-                                    notifier.removeFeeling(feeling);
+                                    notifier.removeFeeling(feeling['name']!);
                                   }
                                 },
                               );

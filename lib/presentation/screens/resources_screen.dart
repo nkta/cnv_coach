@@ -23,7 +23,8 @@ class ResourcesScreen extends StatelessWidget {
                   title: Text(category.key, style: theme.textTheme.titleMedium),
                   children: category.value.map((feeling) {
                     return ListTile(
-                      title: Text(feeling),
+                      title: Text(feeling['name']!),
+                      subtitle: Text(feeling['definition']!),
                       dense: true,
                     );
                   }).toList(),
@@ -36,7 +37,8 @@ class ResourcesScreen extends StatelessWidget {
               title: Text('Bibliothèque des besoins', style: theme.textTheme.titleLarge),
               children: needsData.map((need) {
                 return ListTile(
-                  title: Text(need),
+                  title: Text(need['name']!),
+                  subtitle: Text(need['definition']!),
                   dense: true,
                 );
               }).toList(),

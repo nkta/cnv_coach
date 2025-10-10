@@ -54,26 +54,58 @@ class SummaryScreen extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            onPressed: () {
-              // 1. Créer l'objet JournalEntry
-              final newEntry = JournalEntry(
-                observation: entryState.observation ?? '',
-                feelings: entryState.feelings,
-                need: entryState.need ?? '',
-                demand: entryState.demand ?? '',
-              );
+            onPressed: () async {
+              // Vérifier si les champs obligatoires ne sont pas vides
+              if (entryState.observation == null ||
+                  entryState.observation!.isEmpty ||
+                  entryState.feelings.isEmpty ||
+                  entryState.need == null ||
+                  entryState.need!.isEmpty ||
+                  entryState.demand == null ||
+                  entryState.demand!.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Veuillez remplir toutes les étapes avant d\'enregistrer.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return; // Arrêter l'exécution
+              }
 
-              // 2. Ajouter à la base de données via le service
-              ref.read(journalServiceProvider).addEntry(newEntry);
+              try {
+                // 1. Créer l'objet JournalEntry
+                final newEntry = JournalEntry(
+                  observation: entryState.observation!,
+                  feelings: entryState.feelings,
+                  need: entryState.need!,
+                  demand: entryState.demand!,
+                );
 
-              // 3. Invalider le provider pour forcer le rafraîchissement de la liste
-              ref.invalidate(journalEntriesProvider);
+                // 2. Utiliser le notifier pour ajouter l'entrée et mettre à jour l'état
+                await ref.read(journalEntriesProvider.notifier).addEntry(newEntry);
 
-              // 4. Réinitialiser l'état du parcours
-              ref.read(entryFlowProvider.notifier).reset();
+                // 3. Réinitialiser l'état du parcours
+                ref.read(entryFlowProvider.notifier).reset();
 
-              // 5. Naviguer vers l'écran du journal
-              context.go('/journal');
+                // Afficher une confirmation
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Entrée enregistrée avec succès !'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+
+                // 5. Naviguer vers l'écran du journal
+                context.go('/journal');
+              } catch (e) {
+                // En cas d'erreur, afficher un message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Erreur lors de l\'enregistrement : $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
             },
             child: const Text('Enregistrer dans mon journal'),
           ),

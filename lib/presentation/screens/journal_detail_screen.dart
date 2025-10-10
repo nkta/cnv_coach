@@ -1,0 +1,76 @@
+import 'package:cnv_coach/data/models/journal_entry.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+class JournalDetailScreen extends StatelessWidget {
+  final JournalEntry entry;
+
+  const JournalDetailScreen({super.key, required this.entry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(DateFormat.yMMMd('fr_FR').format(entry.createdAt)),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
+        children: [
+          _buildDetailCard(
+            context,
+            title: 'Observation',
+            content: entry.observation,
+            icon: Icons.visibility_outlined,
+          ),
+          _buildDetailCard(
+            context,
+            title: 'Sentiments',
+            content: entry.feelings.join(', '),
+            icon: Icons.favorite_border,
+          ),
+          _buildDetailCard(
+            context,
+            title: 'Besoin',
+            content: entry.need,
+            icon: Icons.lightbulb_outline,
+          ),
+          _buildDetailCard(
+            context,
+            title: 'Demande',
+            content: entry.demand,
+            icon: Icons.record_voice_over_outlined,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () => context.go('/journal'),
+            child: const Text('Retour au journal'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailCard(BuildContext context, {required String title, required String content, required IconData icon}) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: Theme.of(context).colorScheme.primary),
+                const SizedBox(width: 8),
+                Text(title, style: Theme.of(context).textTheme.titleLarge),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(content, style: Theme.of(context).textTheme.bodyLarge),
+          ],
+        ),
+      ),
+    );
+  }
+}

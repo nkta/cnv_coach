@@ -1,15 +1,18 @@
 import 'package:cnv_coach/core/theme.dart';
+import 'package:cnv_coach/data/models/journal_entry.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/1_observation_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/2_feeling_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/3_need_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/4_demand_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/5_summary_screen.dart';
 import 'package:cnv_coach/presentation/screens/exercises/fact_sorting_screen.dart';
+import 'package:cnv_coach/presentation/screens/journal_detail_screen.dart';
 import 'package:cnv_coach/presentation/widgets/main_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'presentation/screens/exercises_screen.dart';
 import 'presentation/screens/home_screen.dart';
@@ -22,6 +25,9 @@ import 'presentation/providers/journal_providers.dart';
 void main() async {
   // Assurer l'initialisation des bindings Flutter
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialiser le support pour le formatage des dates en français
+  await initializeDateFormatting('fr_FR', null);
 
   // Initialiser Hive pour le stockage local
   await Hive.initFlutter();
@@ -71,6 +77,23 @@ final GoRouter _router = GoRouter(
           builder: (context, state) => const ResourcesScreen(),
         ),
       ],
+    ),
+    // --- Écran de détail du journal ---
+    GoRoute(
+      path: '/journal/detail',
+      builder: (context, state) {
+        final entry = state.extra as JournalEntry?;
+        if (entry != null) {
+          return JournalDetailScreen(entry: entry);
+        } else {
+          // Gérer le cas où l'entrée est nulle, peut-être rediriger
+          return const Scaffold(
+            body: Center(
+              child: Text('Erreur : Entrée non trouvée.'),
+            ),
+          );
+        }
+      },
     ),
     // --- Parcours de création d'une entrée ---
     GoRoute(

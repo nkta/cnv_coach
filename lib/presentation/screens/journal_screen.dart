@@ -46,8 +46,7 @@ class JournalScreen extends ConsumerWidget {
                   key: ValueKey(entry.id),
                   direction: DismissDirection.endToStart,
                   onDismissed: (direction) {
-                    ref.read(journalServiceProvider).deleteEntry(entry.id);
-                    ref.invalidate(journalEntriesProvider);
+                    ref.read(journalEntriesProvider.notifier).deleteEntry(entry.id);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Entrée supprimée')),
                     );
@@ -65,7 +64,7 @@ class JournalScreen extends ConsumerWidget {
                       subtitle: Text(DateFormat.yMMMd('fr_FR').format(entry.createdAt)),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
-                        // TODO: Naviguer vers l'écran de détail de l'entrée
+                        context.go('/journal/detail', extra: entry);
                       },
                     ),
                   ),
