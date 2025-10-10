@@ -85,9 +85,9 @@ Le flux de données dans l'application est principalement unidirectionnel, gér�
 
 ```mermaid
 graph TD
-    User[Utilisateur] --> UI[Interface Utilisateur [Widgets/Écrans]]
-    UI --> Action[Action Utilisateur [ex: Ajouter une entrée]]
-    Action --> Provider[Provider Riverpod [ex: journalEntriesProvider]]
+    User[Utilisateur] --> UI[Interface Utilisateur]
+    UI --> Action[Action Utilisateur]
+    Action --> Provider[Provider Riverpod]
     Provider --> Service[JournalService]
     Service --> Hive[Base de données Hive]
     Hive --> Service
