@@ -183,3 +183,25 @@ Pour toute personne souhaitant maintenir ou faire évoluer cette application, vo
         ```
 
 Cette documentation devrait servir de guide solide pour comprendre et maintenir l'application CNV Coach.
+
+## 11. Ressources sur la CNV
+
+### Comprendre la Communication NonViolente
+
+La Communication NonViolente (CNV) est une approche relationnelle proposée par Marshall B. Rosenberg qui vise à créer un dialogue empathique fondé sur la compréhension mutuelle des besoins. Elle repose sur quatre étapes clés : observer une situation sans jugement, identifier les sentiments associés, clarifier les besoins sous-jacents puis formuler une demande concrète. Cette démarche favorise une communication respectueuse, l'écoute active et la recherche de solutions coopératives.
+
+### Pour aller plus loin
+
+Pour approfondir vos connaissances sur la Communication NonViolente, voici une sélection de ressources fiables :
+
+*   **Livres**
+    *   *Les mots sont des fenêtres (ou bien ce sont des murs)* – Marshall B. Rosenberg : l'ouvrage de référence pour comprendre les principes fondateurs de la CNV.
+    *   *La Communication NonViolente au quotidien* – Marshall B. Rosenberg et Lucy Leu : un guide pratique pour intégrer la CNV dans sa vie personnelle et professionnelle.
+*   **Sites web**
+    *   [Centre pour la Communication NonViolente (CNVC)](https://www.cnvc.org/) : site officiel de l'organisation fondée par Marshall Rosenberg, avec des ressources, formations et annuaire des formateurs certifiés.
+    *   [ACNV France](https://www.cnvformations.fr/) : association francophone proposant un calendrier des formations, des articles et des supports pédagogiques.
+*   **Contenus multimédias**
+    *   [Chaîne YouTube « Communication NonViolente »](https://www.youtube.com/@CommunicationNonviolente) : conférences et ateliers enregistrés autour de la pratique de la CNV.
+    *   [Podcast « Pratiquer la Communication NonViolente »](https://open.spotify.com/show/5kB5RwP0J3JXqCmqyIZnZU) : témoignages et mises en situation pour appliquer la CNV au quotidien.
+
+Ces ressources permettent d'aller plus loin dans la compréhension théorique et pratique de la CNV, et peuvent être partagées avec les utilisateurs de l'application pour accompagner leur progression.

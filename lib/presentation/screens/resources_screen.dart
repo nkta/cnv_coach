@@ -16,6 +16,25 @@ class ResourcesScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         children: [
           Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Qu'est-ce que la CNV ?",
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'La Communication NonViolente invite à observer une situation sans jugement, à nommer les sentiments ressentis, à identifier les besoins sous-jacents puis à formuler une demande claire. Cette approche, popularisée par Marshall B. Rosenberg, encourage un dialogue empathique et la recherche de solutions coopératives.',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Card(
             child: ExpansionTile(
               title: Text('Bibliothèque des sentiments', style: theme.textTheme.titleLarge),
               children: feelingsData.entries.map((category) {
