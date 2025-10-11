@@ -3,11 +3,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class DemandScreen extends ConsumerWidget {
+import '../../widgets/voice_dictation_text_field.dart';
+
+class DemandScreen extends ConsumerStatefulWidget {
   const DemandScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DemandScreen> createState() => _DemandScreenState();
+}
+
+class _DemandScreenState extends ConsumerState<DemandScreen> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        TextEditingController(text: ref.read(entryFlowProvider).demand ?? '');
+
+    ref.listen(entryFlowProvider, (previous, next) {
+      final newValue = next.demand ?? '';
+      if (newValue != _controller.text) {
+        _controller.value = _controller.value.copyWith(
+          text: newValue,
+          selection: TextSelection.collapsed(offset: newValue.length),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Étape 4/5 : Demande'),
@@ -32,16 +64,16 @@ class DemandScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             Expanded(
-              child: TextFormField(
-                initialValue: ref.read(entryFlowProvider).demand ?? '',
+              child: VoiceDictationTextField(
+                controller: _controller,
                 onChanged: (value) {
                   ref.read(entryFlowProvider.notifier).setDemand(value);
                 },
-                maxLines: null,
                 expands: true,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: const InputDecoration(
-                  hintText: 'Ex: "J\'aimerais prendre 5 minutes pour respirer..." ou "La prochaine fois, serais-tu d\'accord pour..."',
+                  hintText:
+                      'Ex: "J\'aimerais prendre 5 minutes pour respirer..." ou "La prochaine fois, serais-tu d\'accord pour..."',
                   border: OutlineInputBorder(),
                 ),
               ),
