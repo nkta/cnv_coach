@@ -8,6 +8,29 @@ class ResourcesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    const cnvSteps = [
+      {
+        'title': 'Observer sans juger',
+        'description':
+            'Décrire simplement les faits observables afin d’éviter les interprétations ou évaluations.'
+      },
+      {
+        'title': 'Exprimer ses sentiments',
+        'description':
+            'Partager ce qui est vivant en soi pour clarifier son expérience émotionnelle.'
+      },
+      {
+        'title': 'Identifier ses besoins',
+        'description':
+            'Relier les sentiments à des aspirations ou valeurs fondamentales.'
+      },
+      {
+        'title': 'Formuler une demande claire',
+        'description':
+            'Proposer une action concrète, positive et réalisable pour prendre soin des besoins.'
+      }
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ressources'),
@@ -15,6 +38,50 @@ class ResourcesScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Qu'est-ce que la CNV ?", style: theme.textTheme.titleLarge),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'La Communication NonViolente (CNV) est un processus en quatre étapes pour favoriser un dialogue empathique et respectueux. Elle aide à prendre soin de la relation tout en restant attentif à ses propres besoins.',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 12.0),
+                  ...cnvSteps.map(
+                    (step) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('• ', style: theme.textTheme.bodyMedium),
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                style: theme.textTheme.bodyMedium,
+                                children: [
+                                  TextSpan(
+                                    text: "${step['title']} : ",
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  TextSpan(text: step['description']),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           Card(
             child: ExpansionTile(
               title: Text('Bibliothèque des sentiments', style: theme.textTheme.titleLarge),

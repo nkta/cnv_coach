@@ -183,3 +183,32 @@ Pour toute personne souhaitant maintenir ou faire évoluer cette application, vo
         ```
 
 Cette documentation devrait servir de guide solide pour comprendre et maintenir l'application CNV Coach.
+
+## 11. Ressources sur la CNV
+
+### Comprendre la Communication NonViolente
+
+La Communication NonViolente (CNV) est une approche relationnelle proposée par Marshall B. Rosenberg qui vise à créer un dialogue empathique fondé sur la compréhension mutuelle des besoins. Elle favorise une communication respectueuse, l'écoute active et la recherche de solutions coopératives. Le processus se structure autour de quatre composantes complémentaires :
+
+1.  **Observation** – décrire les faits sans jugement ni interprétation afin de créer un terrain neutre de discussion.
+2.  **Sentiments** – nommer ce qui est vécu intérieurement pour clarifier son expérience émotionnelle.
+3.  **Besoins** – identifier les aspirations profondes ou valeurs nourrissant ces sentiments.
+4.  **Demande** – formuler une action concrète, positive et réalisable qui pourrait contribuer à nourrir les besoins exprimés.
+
+Ces étapes servent de guide pour structurer les échanges, accueillir l'autre avec empathie et prendre soin de la relation tout en restant fidèle à ses propres besoins.
+
+### Pour aller plus loin
+
+Pour approfondir vos connaissances sur la Communication NonViolente, voici une sélection de ressources fiables :
+
+*   **Livres**
+    *   *Les mots sont des fenêtres (ou bien ce sont des murs)* – Marshall B. Rosenberg : l'ouvrage de référence pour comprendre les principes fondateurs de la CNV.
+    *   *La Communication NonViolente au quotidien* – Marshall B. Rosenberg et Lucy Leu : un guide pratique pour intégrer la CNV dans sa vie personnelle et professionnelle.
+*   **Sites web**
+    *   [Centre pour la Communication NonViolente (CNVC)](https://www.cnvc.org/) : site officiel de l'organisation fondée par Marshall Rosenberg, avec des ressources, formations et annuaire des formateurs certifiés.
+    *   [ACNV France](https://www.cnvformations.fr/) : association francophone proposant un calendrier des formations, des articles et des supports pédagogiques.
+*   **Contenus multimédias**
+    *   [Chaîne YouTube « Communication NonViolente »](https://www.youtube.com/@CommunicationNonviolente) : conférences et ateliers enregistrés autour de la pratique de la CNV.
+    *   [Podcast « Pratiquer la Communication NonViolente »](https://open.spotify.com/show/5kB5RwP0J3JXqCmqyIZnZU) : témoignages et mises en situation pour appliquer la CNV au quotidien.
+
+Ces ressources permettent d'aller plus loin dans la compréhension théorique et pratique de la CNV et peuvent être partagées avec les utilisateurs de l'application pour accompagner leur progression.
