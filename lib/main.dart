@@ -1,5 +1,6 @@
 import 'package:cnv_coach/core/theme.dart';
 import 'package:cnv_coach/data/models/journal_entry.dart';
+import 'package:cnv_coach/presentation/providers/device_auth_provider.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/1_observation_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/2_feeling_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/3_need_screen.dart';
@@ -23,6 +24,7 @@ import 'presentation/screens/home_screen.dart';
 import 'presentation/screens/journal_screen.dart';
 import 'presentation/screens/resources_screen.dart';
 
+import 'data/services/device_auth_service.dart';
 import 'data/services/journal_service.dart';
 import 'presentation/providers/journal_providers.dart';
 
@@ -40,11 +42,15 @@ void main() async {
   final journalService = JournalService();
   await journalService.init();
 
+  // Créer le service d'authentification biométrique
+  final deviceAuthService = DeviceAuthService();
+
   runApp(
     ProviderScope(
       overrides: [
         // Fournir l'instance initialisée du service au provider
         journalServiceProvider.overrideWithValue(journalService),
+        deviceAuthServiceProvider.overrideWithValue(deviceAuthService),
       ],
       child: const MyApp(),
     ),
@@ -53,6 +59,17 @@ void main() async {
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
+
+String? _redirectIfUnauthenticated(BuildContext context, GoRouterState state) {
+  final container = ProviderScope.containerOf(context, listen: false);
+  final authStatus = container.read(deviceAuthControllerProvider);
+
+  if (authStatus == DeviceAuthStatus.authenticated) {
+    return null;
+  }
+
+  return '/';
+}
 
 final GoRouter _router = GoRouter(
   initialLocation: '/',
@@ -85,6 +102,7 @@ final GoRouter _router = GoRouter(
     // --- Écran de détail du journal ---
     GoRoute(
       path: '/journal/detail',
+      redirect: _redirectIfUnauthenticated,
       builder: (context, state) {
         final entry = state.extra as JournalEntry?;
         if (entry != null) {
@@ -102,22 +120,27 @@ final GoRouter _router = GoRouter(
     // --- Parcours de création d'une entrée ---
     GoRoute(
       path: '/journal/add/observation',
+      redirect: _redirectIfUnauthenticated,
       builder: (context, state) => const ObservationScreen(),
     ),
     GoRoute(
       path: '/journal/add/feeling',
+      redirect: _redirectIfUnauthenticated,
       builder: (context, state) => const FeelingScreen(),
     ),
     GoRoute(
       path: '/journal/add/need',
+      redirect: _redirectIfUnauthenticated,
       builder: (context, state) => const NeedScreen(),
     ),
     GoRoute(
       path: '/journal/add/demand',
+      redirect: _redirectIfUnauthenticated,
       builder: (context, state) => const DemandScreen(),
     ),
     GoRoute(
       path: '/journal/add/summary',
+      redirect: _redirectIfUnauthenticated,
       builder: (context, state) => const SummaryScreen(),
     ),
     // --- Exercices ---
