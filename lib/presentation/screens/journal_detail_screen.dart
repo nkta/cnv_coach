@@ -1,18 +1,36 @@
 import 'package:cnv_coach/data/models/journal_entry.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class JournalDetailScreen extends StatelessWidget {
+import 'package:cnv_coach/presentation/providers/journal_providers.dart';
+
+class JournalDetailScreen extends ConsumerWidget {
   final JournalEntry entry;
 
   const JournalDetailScreen({super.key, required this.entry});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final journalEntries = ref.watch(journalEntriesProvider);
+    final currentEntry = journalEntries.firstWhere(
+      (item) => item.id == entry.id,
+      orElse: () => entry,
+    );
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(DateFormat.yMMMd('fr_FR').format(entry.createdAt)),
+        title: Text(DateFormat.yMMMd('fr_FR').format(currentEntry.createdAt)),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Modifier',
+            onPressed: () {
+              context.push('/journal/edit', extra: currentEntry);
+            },
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
@@ -20,25 +38,25 @@ class JournalDetailScreen extends StatelessWidget {
           _buildDetailCard(
             context,
             title: 'Observation',
-            content: entry.observation,
+            content: currentEntry.observation,
             icon: Icons.visibility_outlined,
           ),
           _buildDetailCard(
             context,
             title: 'Sentiments',
-            content: entry.feelings.join(', '),
+            content: currentEntry.feelings.join(', '),
             icon: Icons.favorite_border,
           ),
           _buildDetailCard(
             context,
             title: 'Besoin',
-            content: entry.need,
+            content: currentEntry.need,
             icon: Icons.lightbulb_outline,
           ),
           _buildDetailCard(
             context,
             title: 'Demande',
-            content: entry.demand,
+            content: currentEntry.demand,
             icon: Icons.record_voice_over_outlined,
           ),
           const SizedBox(height: 24),

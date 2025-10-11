@@ -24,10 +24,28 @@ class JournalEntry extends HiveObject {
   final String demand;
 
   JournalEntry({
+    String? id,
+    DateTime? createdAt,
     required this.observation,
     required this.feelings,
     required this.need,
     required this.demand,
-  })  : id = const Uuid().v4(),
-        createdAt = DateTime.now();
+  })  : id = id ?? const Uuid().v4(),
+        createdAt = createdAt ?? DateTime.now();
+
+  JournalEntry copyWith({
+    String? observation,
+    List<String>? feelings,
+    String? need,
+    String? demand,
+  }) {
+    return JournalEntry(
+      id: id,
+      createdAt: createdAt,
+      observation: observation ?? this.observation,
+      feelings: feelings ?? List<String>.from(this.feelings),
+      need: need ?? this.need,
+      demand: demand ?? this.demand,
+    );
+  }
 }
