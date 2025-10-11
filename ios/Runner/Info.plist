@@ -47,5 +47,9 @@
         <true/>
         <key>NSFaceIDUsageDescription</key>
         <string>Cette application utilise Face ID ou Touch ID pour sécuriser votre journal.</string>
+        <key>NSSpeechRecognitionUsageDescription</key>
+        <string>La dictée vocale permet de remplir plus facilement votre journal.</string>
+        <key>NSMicrophoneUsageDescription</key>
+        <string>Le micro est nécessaire pour capturer votre voix lors de la dictée.</string>
 </dict>
 </plist>

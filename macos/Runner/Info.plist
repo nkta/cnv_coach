@@ -22,11 +22,15 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>$(PRODUCT_COPYRIGHT)</string>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+        <key>NSHumanReadableCopyright</key>
+        <string>$(PRODUCT_COPYRIGHT)</string>
+        <key>NSMainNibFile</key>
+        <string>MainMenu</string>
+        <key>NSPrincipalClass</key>
+        <string>NSApplication</string>
+        <key>NSSpeechRecognitionUsageDescription</key>
+        <string>La dictée vocale permet de remplir plus facilement votre journal.</string>
+        <key>NSMicrophoneUsageDescription</key>
+        <string>Le micro est nécessaire pour capturer votre voix lors de la dictée.</string>
 </dict>
 </plist>
