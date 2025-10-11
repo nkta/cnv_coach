@@ -12,6 +12,7 @@ import 'package:cnv_coach/presentation/screens/exercises/fact_sorting_screen.dar
 import 'package:cnv_coach/presentation/screens/exercises/feeling_wheel_screen.dart';
 import 'package:cnv_coach/presentation/screens/exercises/magic_wand_screen.dart';
 import 'package:cnv_coach/presentation/screens/journal_detail_screen.dart';
+import 'package:cnv_coach/presentation/screens/journal_edit_screen.dart';
 import 'package:cnv_coach/presentation/widgets/main_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -115,6 +116,21 @@ final GoRouter _router = GoRouter(
             ),
           );
         }
+      },
+    ),
+    GoRoute(
+      path: '/journal/edit',
+      redirect: _redirectIfUnauthenticated,
+      builder: (context, state) {
+        final entry = state.extra as JournalEntry?;
+        if (entry != null) {
+          return JournalEditScreen(entry: entry);
+        }
+        return const Scaffold(
+          body: Center(
+            child: Text('Erreur : Entrée non trouvée.'),
+          ),
+        );
       },
     ),
     // --- Parcours de création d'une entrée ---

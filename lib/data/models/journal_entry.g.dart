@@ -17,6 +17,8 @@ class JournalEntryAdapter extends TypeAdapter<JournalEntry> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return JournalEntry(
+      id: fields[0] as String?,
+      createdAt: fields[1] as DateTime?,
       observation: fields[2] as String,
       feelings: (fields[3] as List).cast<String>(),
       need: fields[4] as String,

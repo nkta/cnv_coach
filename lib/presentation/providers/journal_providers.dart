@@ -35,6 +35,12 @@ class JournalEntriesNotifier extends StateNotifier<List<JournalEntry>> {
     // On rafraîchit aussi la liste après une suppression.
     loadEntries();
   }
+
+  /// Met à jour une entrée existante et rafraîchit la liste.
+  Future<void> updateEntry(JournalEntry entry) async {
+    await _journalService.updateEntry(entry);
+    loadEntries();
+  }
 }
 
 // Provider qui expose le JournalEntriesNotifier et sa liste d'entrées.
