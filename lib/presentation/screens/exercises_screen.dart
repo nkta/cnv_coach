@@ -26,28 +26,28 @@ class ExercisesScreen extends StatelessWidget {
             title: 'Le Moteur des Émotions',
             subtitle: 'Relier un sentiment à son besoin source.',
             icon: LucideIcons.puzzle,
-            route: '/exercises/emotion_engine', // TODO: Implement route
+            route: '/exercises/emotion_engine',
           ),
           _buildExerciseCard(
             context,
             title: 'La Baguette Magique',
             subtitle: 'Transformer une plainte en demande claire.',
             icon: LucideIcons.wand,
-            route: '/exercises/magic_wand', // TODO: Implement route
+            route: '/exercises/magic_wand',
           ),
           _buildExerciseCard(
             context,
             title: 'Le Détecteur d\'Empathie',
             subtitle: 'Deviner les sentiments et besoins de l\'autre.',
             icon: LucideIcons.radar,
-            route: '/exercises/empathy_detector', // TODO: Implement route
+            route: '/exercises/empathy_detector',
           ),
           _buildExerciseCard(
             context,
             title: 'La Roue des Sentiments',
             subtitle: 'Explorer un sentiment au hasard.',
             icon: LucideIcons.refreshCw,
-            route: '/exercises/feeling_wheel', // TODO: Implement route
+            route: '/exercises/feeling_wheel',
           ),
         ],
       ),

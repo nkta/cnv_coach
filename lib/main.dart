@@ -5,7 +5,11 @@ import 'package:cnv_coach/presentation/screens/entry_flow/2_feeling_screen.dart'
 import 'package:cnv_coach/presentation/screens/entry_flow/3_need_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/4_demand_screen.dart';
 import 'package:cnv_coach/presentation/screens/entry_flow/5_summary_screen.dart';
+import 'package:cnv_coach/presentation/screens/exercises/emotion_engine_screen.dart';
+import 'package:cnv_coach/presentation/screens/exercises/empathy_detector_screen.dart';
 import 'package:cnv_coach/presentation/screens/exercises/fact_sorting_screen.dart';
+import 'package:cnv_coach/presentation/screens/exercises/feeling_wheel_screen.dart';
+import 'package:cnv_coach/presentation/screens/exercises/magic_wand_screen.dart';
 import 'package:cnv_coach/presentation/screens/journal_detail_screen.dart';
 import 'package:cnv_coach/presentation/widgets/main_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -120,6 +124,22 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/exercises/fact_sorting',
       builder: (context, state) => const FactSortingScreen(),
+    ),
+    GoRoute(
+      path: '/exercises/emotion_engine',
+      builder: (context, state) => const EmotionEngineScreen(),
+    ),
+    GoRoute(
+      path: '/exercises/magic_wand',
+      builder: (context, state) => const MagicWandScreen(),
+    ),
+    GoRoute(
+      path: '/exercises/empathy_detector',
+      builder: (context, state) => const EmpathyDetectorScreen(),
+    ),
+    GoRoute(
+      path: '/exercises/feeling_wheel',
+      builder: (context, state) => const FeelingWheelScreen(),
     ),
   ],
 );
