@@ -1,14 +1,51 @@
+import 'package:cnv_coach/presentation/providers/device_auth_provider.dart';
 import 'package:cnv_coach/presentation/providers/journal_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class JournalScreen extends ConsumerWidget {
+class JournalScreen extends ConsumerStatefulWidget {
   const JournalScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<JournalScreen> createState() => _JournalScreenState();
+}
+
+class _JournalScreenState extends ConsumerState<JournalScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(deviceAuthControllerProvider.notifier).authenticate();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authStatus = ref.watch(deviceAuthControllerProvider);
+
+    if (authStatus == DeviceAuthStatus.unknown ||
+        authStatus == DeviceAuthStatus.authenticating) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Mon Journal'),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (authStatus != DeviceAuthStatus.authenticated) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Mon Journal'),
+        ),
+        body: _LockedJournalView(onRetry: _retryAuthentication),
+      );
+    }
+
     final journalEntries = ref.watch(journalEntriesProvider);
 
     return Scaffold(
@@ -76,6 +113,55 @@ class JournalScreen extends ConsumerWidget {
           context.go('/journal/add/observation');
         },
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _retryAuthentication() {
+    ref.read(deviceAuthControllerProvider.notifier).authenticate();
+  }
+}
+
+class _LockedJournalView extends StatelessWidget {
+  const _LockedJournalView({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.lock_outline, size: 60, color: Colors.grey),
+            const SizedBox(height: 16),
+            Text(
+              'Accès verrouillé',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.grey[700]),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Nous n\'avons pas pu vérifier votre identité. Veuillez réessayer ou revenir à l\'accueil.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.grey[600]),
+            ),
+            const SizedBox(height: 24),
+            FilledButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.fingerprint),
+              label: const Text('Réessayer'),
+            ),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () {
+                context.go('/');
+              },
+              child: const Text('Retour à l\'accueil'),
+            ),
+          ],
+        ),
       ),
     );
   }
