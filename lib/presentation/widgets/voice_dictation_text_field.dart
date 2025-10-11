@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class VoiceDictationTextField extends StatefulWidget {
@@ -98,7 +100,7 @@ class _VoiceDictationTextFieldState extends State<VoiceDictationTextField> {
     }
   }
 
-  void _onSpeechResult(stt.SpeechRecognitionResult result) {
+  void _onSpeechResult(SpeechRecognitionResult result) {
     final recognized = result.recognizedWords.trimLeft();
     final updatedText = recognized.isEmpty
         ? _dictationBaseText.trimRight()
@@ -123,7 +125,7 @@ class _VoiceDictationTextFieldState extends State<VoiceDictationTextField> {
     }
   }
 
-  void _handleError(stt.SpeechRecognitionError error) {
+  void _handleError(SpeechRecognitionError error) {
     if (mounted) {
       setState(() {
         _isListening = false;
