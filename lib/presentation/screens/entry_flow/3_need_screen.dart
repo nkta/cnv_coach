@@ -16,7 +16,8 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedNeeds = ref.watch(entryFlowProvider).needs;
+    final selectedNeeds = ref.watch(entryFlowProvider.select((state) => state.needs));
+    final selectedNeedsSet = selectedNeeds.toSet();
     final notifier = ref.read(entryFlowProvider.notifier);
 
     final query = _searchQuery.toLowerCase();
@@ -69,8 +70,9 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
                 final need = filteredNeeds[index];
                 final needName = need['name'] ?? '';
                 final needDefinition = need['definition'];
-                final isSelected = selectedNeeds.contains(needName);
+                final isSelected = selectedNeedsSet.contains(needName);
                 return CheckboxListTile(
+                  key: ValueKey(needName),
                   title: Text(needName),
                   subtitle: (needDefinition != null && needDefinition.isNotEmpty)
                       ? Text(needDefinition)

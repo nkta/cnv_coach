@@ -54,14 +54,16 @@ class EntryFlowNotifier extends Notifier<EntryFlowState> {
   }
 
   void toggleNeed(String need) {
-    final currentNeeds = state.needs;
-    if (currentNeeds.contains(need)) {
-      state = state.copyWith(
-        needs: currentNeeds.where((n) => n != need).toList(),
-      );
+    final updatedNeeds = List<String>.from(state.needs);
+    final existingIndex = updatedNeeds.indexOf(need);
+
+    if (existingIndex >= 0) {
+      updatedNeeds.removeAt(existingIndex);
     } else {
-      state = state.copyWith(needs: [...currentNeeds, need]);
+      updatedNeeds.add(need);
     }
+
+    state = state.copyWith(needs: updatedNeeds);
   }
 
   void clearNeeds() {
