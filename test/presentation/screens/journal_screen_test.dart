@@ -34,7 +34,7 @@ void main() {
       JournalEntry(
         observation: 'Observation test',
         feelings: const ['joie'],
-        need: 'Besoin',
+        needs: const ['Besoin'],
         demand: 'Demande',
       ),
     ];

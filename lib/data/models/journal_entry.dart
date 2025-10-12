@@ -18,7 +18,7 @@ class JournalEntry extends HiveObject {
   final List<String> feelings;
 
   @HiveField(4)
-  final String need;
+  final List<String> needs;
 
   @HiveField(5)
   final String demand;
@@ -28,15 +28,16 @@ class JournalEntry extends HiveObject {
     DateTime? createdAt,
     required this.observation,
     required this.feelings,
-    required this.need,
+    required List<String> needs,
     required this.demand,
   })  : id = id ?? const Uuid().v4(),
-        createdAt = createdAt ?? DateTime.now();
+        createdAt = createdAt ?? DateTime.now(),
+        needs = List.unmodifiable(needs);
 
   JournalEntry copyWith({
     String? observation,
     List<String>? feelings,
-    String? need,
+    List<String>? needs,
     String? demand,
   }) {
     return JournalEntry(
@@ -44,7 +45,7 @@ class JournalEntry extends HiveObject {
       createdAt: createdAt,
       observation: observation ?? this.observation,
       feelings: feelings ?? List<String>.from(this.feelings),
-      need: need ?? this.need,
+      needs: needs ?? List<String>.from(this.needs),
       demand: demand ?? this.demand,
     );
   }

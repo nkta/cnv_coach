@@ -16,7 +16,7 @@ class JournalEditScreen extends ConsumerStatefulWidget {
 class _JournalEditScreenState extends ConsumerState<JournalEditScreen> {
   late final TextEditingController _observationController;
   late final TextEditingController _feelingsController;
-  late final TextEditingController _needController;
+  late final TextEditingController _needsController;
   late final TextEditingController _demandController;
   final _formKey = GlobalKey<FormState>();
 
@@ -27,7 +27,8 @@ class _JournalEditScreenState extends ConsumerState<JournalEditScreen> {
         TextEditingController(text: widget.entry.observation);
     _feelingsController =
         TextEditingController(text: widget.entry.feelings.join(', '));
-    _needController = TextEditingController(text: widget.entry.need);
+    _needsController =
+        TextEditingController(text: widget.entry.needs.join(', '));
     _demandController = TextEditingController(text: widget.entry.demand);
   }
 
@@ -35,7 +36,7 @@ class _JournalEditScreenState extends ConsumerState<JournalEditScreen> {
   void dispose() {
     _observationController.dispose();
     _feelingsController.dispose();
-    _needController.dispose();
+    _needsController.dispose();
     _demandController.dispose();
     super.dispose();
   }
@@ -63,8 +64,9 @@ class _JournalEditScreenState extends ConsumerState<JournalEditScreen> {
                   'Exemple : joyeux, reconnaissant, inspiré',
             ),
             _buildTextField(
-              controller: _needController,
-              label: 'Besoin',
+              controller: _needsController,
+              label: 'Besoins (séparés par des virgules)',
+              helperText: 'Exemple : repos, connexion, clarté',
             ),
             _buildTextField(
               controller: _demandController,
@@ -119,10 +121,16 @@ class _JournalEditScreenState extends ConsumerState<JournalEditScreen> {
         .where((feeling) => feeling.isNotEmpty)
         .toList();
 
+    final needs = _needsController.text
+        .split(',')
+        .map((need) => need.trim())
+        .where((need) => need.isNotEmpty)
+        .toList();
+
     final updatedEntry = widget.entry.copyWith(
       observation: _observationController.text.trim(),
       feelings: feelings,
-      need: _needController.text.trim(),
+      needs: needs,
       demand: _demandController.text.trim(),
     );
 

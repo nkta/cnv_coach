@@ -49,8 +49,8 @@ class JournalDetailScreen extends ConsumerWidget {
           ),
           _buildDetailCard(
             context,
-            title: 'Besoin',
-            content: currentEntry.need,
+            title: 'Besoins',
+            content: currentEntry.needs.join(', '),
             icon: Icons.lightbulb_outline,
           ),
           _buildDetailCard(

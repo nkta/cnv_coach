@@ -16,7 +16,7 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedNeed = ref.watch(entryFlowProvider).need;
+    final selectedNeeds = ref.watch(entryFlowProvider).needs;
     final notifier = ref.read(entryFlowProvider.notifier);
 
     final filteredNeeds = needsData
@@ -41,7 +41,7 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Quel besoin n\'était pas satisfait ?',
+                  'Quels besoins n\'étaient pas satisfaits ?',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 16),
@@ -62,15 +62,11 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
               itemCount: filteredNeeds.length,
               itemBuilder: (context, index) {
                 final need = filteredNeeds[index];
-                return RadioListTile<String>(
+                final isSelected = selectedNeeds.contains(need);
+                return CheckboxListTile(
                   title: Text(need),
-                  value: need,
-                  groupValue: selectedNeed,
-                  onChanged: (value) {
-                    if (value != null) {
-                      notifier.setNeed(value);
-                    }
-                  },
+                  value: isSelected,
+                  onChanged: (_) => notifier.toggleNeed(need),
                 );
               },
             ),
@@ -78,7 +74,7 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              onPressed: selectedNeed == null
+              onPressed: selectedNeeds.isEmpty
                   ? null
                   : () {
                       context.go('/journal/add/demand');
