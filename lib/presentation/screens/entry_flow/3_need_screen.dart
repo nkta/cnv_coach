@@ -19,9 +19,14 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
     final selectedNeeds = ref.watch(entryFlowProvider).needs;
     final notifier = ref.read(entryFlowProvider.notifier);
 
+    final query = _searchQuery.toLowerCase();
     final filteredNeeds = needsData
-        .where((need) =>
-            need.toLowerCase().contains(_searchQuery.toLowerCase()))
+        .where((need) {
+          final name = need['name'] ?? '';
+          final definition = need['definition'] ?? '';
+          return name.toLowerCase().contains(query) ||
+              definition.toLowerCase().contains(query);
+        })
         .toList();
 
     return Scaffold(
@@ -62,11 +67,17 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
               itemCount: filteredNeeds.length,
               itemBuilder: (context, index) {
                 final need = filteredNeeds[index];
-                final isSelected = selectedNeeds.contains(need);
+                final needName = need['name'] ?? '';
+                final needDefinition = need['definition'];
+                final isSelected = selectedNeeds.contains(needName);
                 return CheckboxListTile(
-                  title: Text(need),
+                  title: Text(needName),
+                  subtitle: (needDefinition != null && needDefinition.isNotEmpty)
+                      ? Text(needDefinition)
+                      : null,
                   value: isSelected,
-                  onChanged: (_) => notifier.toggleNeed(need),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (_) => notifier.toggleNeed(needName),
                 );
               },
             ),
