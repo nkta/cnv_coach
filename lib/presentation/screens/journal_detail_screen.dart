@@ -1,5 +1,6 @@
 import 'package:cnv_coach/data/models/journal_entry.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +24,19 @@ class JournalDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(DateFormat.yMMMd('fr_FR').format(currentEntry.createdAt)),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.copy),
+            tooltip: 'Copier',
+            onPressed: () async {
+              final copiedContent = _buildCopyContent(currentEntry);
+              await Clipboard.setData(ClipboardData(text: copiedContent));
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Entrée copiée dans le presse-papiers.')),
+                );
+              }
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.edit),
             tooltip: 'Modifier',
@@ -67,6 +81,25 @@ class JournalDetailScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  String _buildCopyContent(JournalEntry entry) {
+    final buffer = StringBuffer()
+      ..writeln('Date : ${DateFormat.yMMMd('fr_FR').format(entry.createdAt)}')
+      ..writeln()
+      ..writeln('Observation :')
+      ..writeln(entry.observation)
+      ..writeln()
+      ..writeln('Sentiments :')
+      ..writeln(entry.feelings.join(', '))
+      ..writeln()
+      ..writeln('Besoin :')
+      ..writeln(entry.need)
+      ..writeln()
+      ..writeln('Demande :')
+      ..writeln(entry.demand);
+
+    return buffer.toString().trim();
   }
 
   Widget _buildDetailCard(BuildContext context, {required String title, required String content, required IconData icon}) {
