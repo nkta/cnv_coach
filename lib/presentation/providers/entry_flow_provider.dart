@@ -5,26 +5,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class EntryFlowState {
   final String? observation;
   final List<String> feelings;
-  final String? need;
+  final List<String> needs;
   final String? demand;
 
   EntryFlowState({
     this.observation,
     this.feelings = const [],
-    this.need,
+    this.needs = const [],
     this.demand,
   });
 
   EntryFlowState copyWith({
     String? observation,
     List<String>? feelings,
-    String? need,
+    List<String>? needs,
     String? demand,
   }) {
     return EntryFlowState(
       observation: observation ?? this.observation,
-      feelings: feelings ?? this.feelings,
-      need: need ?? this.need,
+      feelings: feelings != null
+          ? List<String>.from(feelings)
+          : List<String>.from(this.feelings),
+      needs: needs != null
+          ? List<String>.from(needs)
+          : List<String>.from(this.needs),
       demand: demand ?? this.demand,
     );
   }
@@ -49,8 +53,21 @@ class EntryFlowNotifier extends Notifier<EntryFlowState> {
     state = state.copyWith(feelings: state.feelings.where((f) => f != feeling).toList());
   }
 
-  void setNeed(String need) {
-    state = state.copyWith(need: need);
+  void toggleNeed(String need) {
+    final updatedNeeds = List<String>.from(state.needs);
+    final existingIndex = updatedNeeds.indexOf(need);
+
+    if (existingIndex >= 0) {
+      updatedNeeds.removeAt(existingIndex);
+    } else {
+      updatedNeeds.add(need);
+    }
+
+    state = state.copyWith(needs: updatedNeeds);
+  }
+
+  void clearNeeds() {
+    state = state.copyWith(needs: []);
   }
 
   void setDemand(String demand) {

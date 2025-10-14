@@ -39,8 +39,10 @@ class SummaryScreen extends ConsumerWidget {
           ),
           _buildSummaryCard(
             context,
-            title: 'Besoin',
-            content: entryState.need ?? 'Non défini',
+            title: 'Besoins',
+            content: entryState.needs.isNotEmpty
+                ? entryState.needs.join(', ')
+                : 'Non défini',
             icon: Icons.lightbulb_outline,
           ),
           _buildSummaryCard(
@@ -59,8 +61,7 @@ class SummaryScreen extends ConsumerWidget {
               if (entryState.observation == null ||
                   entryState.observation!.isEmpty ||
                   entryState.feelings.isEmpty ||
-                  entryState.need == null ||
-                  entryState.need!.isEmpty ||
+                  entryState.needs.isEmpty ||
                   entryState.demand == null ||
                   entryState.demand!.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -77,7 +78,7 @@ class SummaryScreen extends ConsumerWidget {
                 final newEntry = JournalEntry(
                   observation: entryState.observation!,
                   feelings: entryState.feelings,
-                  need: entryState.need!,
+                  needs: entryState.needs,
                   demand: entryState.demand!,
                 );
 

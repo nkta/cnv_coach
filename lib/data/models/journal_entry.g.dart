@@ -21,7 +21,7 @@ class JournalEntryAdapter extends TypeAdapter<JournalEntry> {
       createdAt: fields[1] as DateTime?,
       observation: fields[2] as String,
       feelings: (fields[3] as List).cast<String>(),
-      need: fields[4] as String,
+      needs: (fields[4] as List).cast<String>(),
       demand: fields[5] as String,
     );
   }
@@ -39,7 +39,7 @@ class JournalEntryAdapter extends TypeAdapter<JournalEntry> {
       ..writeByte(3)
       ..write(obj.feelings)
       ..writeByte(4)
-      ..write(obj.need)
+      ..write(obj.needs)
       ..writeByte(5)
       ..write(obj.demand);
   }
