@@ -42,6 +42,37 @@ class HomeScreen extends ConsumerWidget {
 
               if (authenticated) {
                 context.go('/journal/add/observation');
+                return;
+              }
+
+              final shouldBypass = await showDialog<bool>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Impossible de vérifier votre identité'),
+                        content: const Text(
+                          'Nous n\'avons pas pu lancer l\'authentification biométrique. Souhaitez-vous continuer quand même ?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: const Text('Annuler'),
+                          ),
+                          FilledButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: const Text('Continuer'),
+                          ),
+                        ],
+                      );
+                    },
+                  ) ??
+                  false;
+
+              if (!context.mounted) return;
+
+              if (shouldBypass) {
+                authController.grantTemporaryAccess();
+                context.go('/journal/add/observation');
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

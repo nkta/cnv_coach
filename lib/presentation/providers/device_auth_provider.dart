@@ -12,42 +12,54 @@ class DeviceAuthController extends StateNotifier<DeviceAuthStatus> {
 
   final DeviceAuthService _service;
 
+  Future<bool>? _inFlight;
+
   Future<bool> authenticate() async {
     if (state == DeviceAuthStatus.authenticated) {
       return true;
     }
 
-    // Éviter les appels concurrents inutiles
-    if (state == DeviceAuthStatus.authenticating) {
-      return false;
+    if (_inFlight != null) {
+      return _inFlight!;
     }
 
-    state = DeviceAuthStatus.authenticating;
+    Future<bool> runAuthentication() async {
+      state = DeviceAuthStatus.authenticating;
 
-    try {
-      final supported = await _service.isDeviceSupported();
-      if (!supported) {
-        state = DeviceAuthStatus.authenticated;
-        return true;
+      try {
+        final supported = await _service.isDeviceSupported();
+        if (!supported) {
+          state = DeviceAuthStatus.authenticated;
+          return true;
+        }
+
+        final canCheck = await _service.canCheckBiometrics();
+        if (!canCheck) {
+          state = DeviceAuthStatus.authenticated;
+          return true;
+        }
+
+        final success = await _service.authenticate();
+        state = success ? DeviceAuthStatus.authenticated : DeviceAuthStatus.failed;
+        return success;
+      } catch (_) {
+        state = DeviceAuthStatus.failed;
+        return false;
+      } finally {
+        _inFlight = null;
       }
-
-      final canCheck = await _service.canCheckBiometrics();
-      if (!canCheck) {
-        state = DeviceAuthStatus.authenticated;
-        return true;
-      }
-
-      final success = await _service.authenticate();
-      state = success ? DeviceAuthStatus.authenticated : DeviceAuthStatus.failed;
-      return success;
-    } catch (_) {
-      state = DeviceAuthStatus.failed;
-      return false;
     }
+
+    _inFlight = runAuthentication();
+    return _inFlight!;
   }
 
   void reset() {
     state = DeviceAuthStatus.unknown;
+  }
+
+  void grantTemporaryAccess() {
+    state = DeviceAuthStatus.authenticated;
   }
 }
 
