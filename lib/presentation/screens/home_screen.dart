@@ -36,14 +36,13 @@ class HomeScreen extends ConsumerWidget {
             subtitle: 'Lancer le parcours d\'auto-empathie.',
             onTap: () async {
               final authController = ref.read(deviceAuthControllerProvider.notifier);
-              await authController.authenticate();
+              final authenticated = await authController.authenticate();
 
-              final status = ref.read(deviceAuthControllerProvider);
-              if (status == DeviceAuthStatus.authenticated) {
-                if (!context.mounted) return;
+              if (!context.mounted) return;
+
+              if (authenticated) {
                 context.go('/journal/add/observation');
               } else {
-                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Authentification requise pour démarrer une pratique.'),

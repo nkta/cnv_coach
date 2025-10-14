@@ -12,10 +12,14 @@ class DeviceAuthController extends StateNotifier<DeviceAuthStatus> {
 
   final DeviceAuthService _service;
 
-  Future<void> authenticate() async {
+  Future<bool> authenticate() async {
+    if (state == DeviceAuthStatus.authenticated) {
+      return true;
+    }
+
     // Éviter les appels concurrents inutiles
     if (state == DeviceAuthStatus.authenticating) {
-      return;
+      return false;
     }
 
     state = DeviceAuthStatus.authenticating;
@@ -24,19 +28,21 @@ class DeviceAuthController extends StateNotifier<DeviceAuthStatus> {
       final supported = await _service.isDeviceSupported();
       if (!supported) {
         state = DeviceAuthStatus.authenticated;
-        return;
+        return true;
       }
 
       final canCheck = await _service.canCheckBiometrics();
       if (!canCheck) {
         state = DeviceAuthStatus.authenticated;
-        return;
+        return true;
       }
 
       final success = await _service.authenticate();
       state = success ? DeviceAuthStatus.authenticated : DeviceAuthStatus.failed;
+      return success;
     } catch (_) {
       state = DeviceAuthStatus.failed;
+      return false;
     }
   }
 
