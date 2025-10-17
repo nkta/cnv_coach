@@ -19,7 +19,12 @@ class _FactSortingScreenState extends State<FactSortingScreen> {
   @override
   void initState() {
     super.initState();
-    _cards = List<FactSortingItem>.from(factSortingData)..shuffle();
+    _cards = _generateCards();
+  }
+
+  List<FactSortingItem> _generateCards() {
+    final cards = List<FactSortingItem>.from(factSortingData)..shuffle();
+    return cards.take(10).toList();
   }
 
   void _handleAnswer(JudgmentType answer) {
@@ -39,7 +44,7 @@ class _FactSortingScreenState extends State<FactSortingScreen> {
 
   void _resetGame() {
     setState(() {
-      _cards.shuffle();
+      _cards = _generateCards();
       _currentIndex = 0;
       _score = 0;
       _sessionFinished = false;
@@ -63,6 +68,13 @@ class _FactSortingScreenState extends State<FactSortingScreen> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text('Observation ou Jugement ?', style: Theme.of(context).textTheme.headlineSmall),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Exercice ${_currentIndex + 1} sur ${_cards.length}',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
         Expanded(
           child: Stack(

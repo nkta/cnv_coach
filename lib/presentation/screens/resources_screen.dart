@@ -31,6 +31,24 @@ class ResourcesScreen extends StatelessWidget {
       }
     ];
 
+    const cnvPhilosophy = [
+      {
+        'title': 'Bienveillance radicale',
+        'description':
+            'Chaque être humain cherche à nourrir des besoins légitimes ; la CNV invite à accueillir cette intention plutôt que les jugements.'
+      },
+      {
+        'title': 'Responsabilité partagée',
+        'description':
+            'La qualité du lien dépend de chacun ; exprimer clairement ce qui est vivant et écouter avec empathie ouvre la voie à des accords respectueux.'
+      },
+      {
+        'title': 'Connexion avant solution',
+        'description':
+            'Avant de résoudre un conflit, la CNV mise sur la présence et l’écoute des sentiments et besoins afin de retrouver un terrain d’entente.'
+      }
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ressources'),
@@ -70,6 +88,50 @@ class ResourcesScreen extends StatelessWidget {
                                     ),
                                   ),
                                   TextSpan(text: step['description']),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('La philosophie de la CNV', style: theme.textTheme.titleLarge),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'Au-delà de la méthode, la CNV propose une vision de la relation basée sur le respect mutuel, l’empathie et la recherche de solutions gagnant-gagnant.',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 12.0),
+                  ...cnvPhilosophy.map(
+                    (principle) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('• ', style: theme.textTheme.bodyMedium),
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                style: theme.textTheme.bodyMedium,
+                                children: [
+                                  TextSpan(
+                                    text: "${principle['title']} : ",
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  TextSpan(text: principle['description']),
                                 ],
                               ),
                             ),

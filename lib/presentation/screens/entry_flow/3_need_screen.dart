@@ -21,7 +21,7 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
 
     final filteredNeeds = needsData
         .where((need) =>
-            need.toLowerCase().contains(_searchQuery.toLowerCase()))
+            need['name']!.toLowerCase().contains(_searchQuery.toLowerCase()))
         .toList();
 
     return Scaffold(
@@ -63,8 +63,8 @@ class _NeedScreenState extends ConsumerState<NeedScreen> {
               itemBuilder: (context, index) {
                 final need = filteredNeeds[index];
                 return RadioListTile<String>(
-                  title: Text(need),
-                  value: need,
+                  title: Text(need['name']!),
+                  value: need['name']!,
                   groupValue: selectedNeed,
                   onChanged: (value) {
                     if (value != null) {
