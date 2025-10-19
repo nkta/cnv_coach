@@ -82,9 +82,31 @@ class JournalDetailScreen extends ConsumerWidget {
             content: currentEntry.demand,
             icon: Icons.record_voice_over_outlined,
           ),
+          if ((currentEntry.selfReflection ?? '').isNotEmpty)
+            _buildDetailCard(
+              context,
+              title: 'Mon ressenti',
+              content: currentEntry.selfReflection!,
+              icon: Icons.psychology_alt_outlined,
+            ),
+          if ((currentEntry.otherReflection ?? '').isNotEmpty)
+            _buildDetailCard(
+              context,
+              title: "Ressenti de l'autre",
+              content: currentEntry.otherReflection!,
+              icon: Icons.group_outlined,
+            ),
+          if (currentEntry.actions.isNotEmpty)
+            _buildActionsCard(context, currentEntry.actions),
           if (linkedEvents.isNotEmpty)
             _buildLinkedEventsCard(context, linkedEvents),
           const SizedBox(height: 24),
+          FilledButton.icon(
+            onPressed: () => context.push('/journal/report', extra: currentEntry),
+            icon: const Icon(Icons.note_alt_outlined),
+            label: const Text('Mettre à jour le compte rendu'),
+          ),
+          const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () => context.go('/journal'),
             child: const Text('Retour au journal'),
@@ -110,6 +132,27 @@ class JournalDetailScreen extends ConsumerWidget {
       ..writeln('Demande :')
       ..writeln(entry.demand);
 
+    if ((entry.selfReflection ?? '').isNotEmpty) {
+      buffer
+        ..writeln()
+        ..writeln('Mon ressenti :')
+        ..writeln(entry.selfReflection);
+    }
+
+    if ((entry.otherReflection ?? '').isNotEmpty) {
+      buffer
+        ..writeln()
+        ..writeln("Ressenti de l'autre :")
+        ..writeln(entry.otherReflection);
+    }
+
+    if (entry.actions.isNotEmpty) {
+      buffer
+        ..writeln()
+        ..writeln('Actions à entreprendre :')
+        ..writeln(entry.actions.map((action) => '- $action').join('\n'));
+    }
+
     return buffer.toString().trim();
   }
 
@@ -130,6 +173,48 @@ class JournalDetailScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(content, style: Theme.of(context).textTheme.bodyLarge),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionsCard(BuildContext context, List<String> actions) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.flag_outlined, color: Theme.of(context).colorScheme.primary),
+                const SizedBox(width: 8),
+                Text(
+                  'Actions à entreprendre',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            ...actions.map(
+              (action) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('• '),
+                    Expanded(
+                      child: Text(
+                        action,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
