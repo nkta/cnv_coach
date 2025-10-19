@@ -1,6 +1,7 @@
 import 'package:cnv_coach/data/models/journal_entry.dart';
 import 'package:cnv_coach/presentation/providers/entry_flow_provider.dart';
 import 'package:cnv_coach/presentation/providers/journal_providers.dart';
+import 'package:cnv_coach/presentation/screens/calendar/calendar_event_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -54,60 +55,23 @@ class SummaryScreen extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            onPressed: () async {
-              // Vérifier si les champs obligatoires ne sont pas vides
-              if (entryState.observation == null ||
-                  entryState.observation!.isEmpty ||
-                  entryState.feelings.isEmpty ||
-                  entryState.need == null ||
-                  entryState.need!.isEmpty ||
-                  entryState.demand == null ||
-                  entryState.demand!.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Veuillez remplir toutes les étapes avant d\'enregistrer.'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return; // Arrêter l'exécution
-              }
-
-              try {
-                // 1. Créer l'objet JournalEntry
-                final newEntry = JournalEntry(
-                  observation: entryState.observation!,
-                  feelings: entryState.feelings,
-                  need: entryState.need!,
-                  demand: entryState.demand!,
-                );
-
-                // 2. Utiliser le notifier pour ajouter l'entrée et mettre à jour l'état
-                await ref.read(journalEntriesProvider.notifier).addEntry(newEntry);
-
-                // 3. Réinitialiser l'état du parcours
-                ref.read(entryFlowProvider.notifier).reset();
-
-                // Afficher une confirmation
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Entrée enregistrée avec succès !'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-
-                // 5. Naviguer vers l'écran du journal
-                context.go('/journal');
-              } catch (e) {
-                // En cas d'erreur, afficher un message
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Erreur lors de l\'enregistrement : $e'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
+            onPressed: () => _handleSave(
+              context,
+              ref,
+              entryState,
+            ),
             child: const Text('Enregistrer dans mon journal'),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            icon: const Icon(Icons.event_available),
+            label: const Text('Enregistrer et planifier une action'),
+            onPressed: () => _handleSave(
+              context,
+              ref,
+              entryState,
+              openPlanner: true,
+            ),
           ),
         ],
       ),
@@ -135,5 +99,75 @@ class SummaryScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _handleSave(
+    BuildContext context,
+    WidgetRef ref,
+    EntryFlowState entryState, {
+    bool openPlanner = false,
+  }) async {
+    if (_hasMissingFields(entryState)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Veuillez remplir toutes les étapes avant d\'enregistrer.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      final newEntry = JournalEntry(
+        observation: entryState.observation!,
+        feelings: entryState.feelings,
+        need: entryState.need!,
+        demand: entryState.demand!,
+      );
+
+      await ref.read(journalEntriesProvider.notifier).addEntry(newEntry);
+      ref.read(entryFlowProvider.notifier).reset();
+
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Entrée enregistrée avec succès !'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      if (openPlanner) {
+        await context.push(
+          '/calendar/event',
+          extra: CalendarEventFormConfig(
+            linkedJournalEntry: newEntry,
+            initialTitle: newEntry.demand,
+          ),
+        );
+        if (!context.mounted) {
+          return;
+        }
+      }
+
+      context.go('/journal');
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('Erreur lors de l\'enregistrement : $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  bool _hasMissingFields(EntryFlowState entryState) {
+    return entryState.observation == null ||
+        entryState.observation!.isEmpty ||
+        entryState.feelings.isEmpty ||
+        entryState.need == null ||
+        entryState.need!.isEmpty ||
+        entryState.demand == null ||
+        entryState.demand!.isEmpty;
   }
 }

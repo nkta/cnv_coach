@@ -136,6 +136,7 @@ Hive est la solution de persistance locale choisie pour sa rapidité et sa simpl
 *   **`JournalEntry` Model** : Le modèle `JournalEntry` (`lib/data/models/journal_entry.dart`) est annoté avec `@HiveType` et `@HiveField` pour indiquer comment il doit être stocké par Hive.
 *   **`hive_generator`** : Le fichier `journal_entry.g.dart` est généré automatiquement par `flutter packages pub run build_runner build` et contient l'adaptateur nécessaire à Hive pour sérialiser/désérialiser `JournalEntry`.
 *   **`JournalService`** : (`lib/data/services/journal_service.dart`) est la classe qui encapsule toute la logique d'interaction avec Hive pour les entrées du journal. Elle ouvre une "boîte" Hive (`_journalBox`) et fournit des méthodes CRUD (`getEntries`, `addEntry`, `deleteEntry`, `updateEntry`).
+*   **`NotificationService`** : (`lib/data/services/notification_service.dart`) centralise l'initialisation de `flutter_local_notifications`, la demande de permissions et la planification/annulation des rappels liés aux `CalendarEvent` (conversions via le package `timezone`).
 
 ## 9. Thème de l'application
 

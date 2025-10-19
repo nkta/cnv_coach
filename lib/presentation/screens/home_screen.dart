@@ -12,9 +12,7 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('CNV Coach'),
-      ),
+      appBar: AppBar(title: const Text('CNV Coach')),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
@@ -35,7 +33,9 @@ class HomeScreen extends ConsumerWidget {
             title: 'Nouvelle pratique',
             subtitle: 'Lancer le parcours d\'auto-empathie.',
             onTap: () async {
-              final authController = ref.read(deviceAuthControllerProvider.notifier);
+              final authController = ref.read(
+                deviceAuthControllerProvider.notifier,
+              );
               final authenticated = await authController.authenticate();
 
               if (!context.mounted) return;
@@ -45,11 +45,14 @@ class HomeScreen extends ConsumerWidget {
                 return;
               }
 
-              final shouldBypass = await showDialog<bool>(
+              final shouldBypass =
+                  await showDialog<bool>(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: const Text('Impossible de vérifier votre identité'),
+                        title: const Text(
+                          'Impossible de vérifier votre identité',
+                        ),
                         content: const Text(
                           'Nous n\'avons pas pu lancer l\'authentification biométrique. Souhaitez-vous continuer quand même ?',
                         ),
@@ -76,7 +79,9 @@ class HomeScreen extends ConsumerWidget {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Authentification requise pour démarrer une pratique.'),
+                    content: Text(
+                      'Authentification requise pour démarrer une pratique.',
+                    ),
                   ),
                 );
               }
@@ -94,6 +99,16 @@ class HomeScreen extends ConsumerWidget {
           ),
           _buildNavCard(
             context,
+            icon: LucideIcons.calendarClock,
+            title: 'Planifier mes actions',
+            subtitle: 'Programmer des échéances ponctuelles ou récurrentes.',
+            onTap: () async {
+              if (!context.mounted) return;
+              context.go('/calendar');
+            },
+          ),
+          _buildNavCard(
+            context,
             icon: LucideIcons.search,
             title: 'Explorer les ressources',
             subtitle: 'Listes des sentiments et des besoins.',
@@ -107,11 +122,13 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildNavCard(BuildContext context,
-      {required IconData icon,
-      required String title,
-      required String subtitle,
-      required Future<void> Function() onTap}) {
+  Widget _buildNavCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Future<void> Function() onTap,
+  }) {
     final theme = Theme.of(context);
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -132,7 +149,12 @@ class HomeScreen extends ConsumerWidget {
                   children: [
                     Text(title, style: theme.textTheme.titleLarge),
                     const SizedBox(height: 4),
-                    Text(subtitle, style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey[600])),
+                    Text(
+                      subtitle,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                    ),
                   ],
                 ),
               ),

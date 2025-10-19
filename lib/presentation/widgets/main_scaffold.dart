@@ -12,11 +12,14 @@ class MainScaffold extends StatelessWidget {
     if (location.startsWith('/journal')) {
       return 1;
     }
-    if (location.startsWith('/exercises')) {
+    if (location.startsWith('/calendar')) {
       return 2;
     }
-    if (location.startsWith('/resources')) {
+    if (location.startsWith('/exercises')) {
       return 3;
+    }
+    if (location.startsWith('/resources')) {
+      return 4;
     }
     return 0;
   }
@@ -30,9 +33,12 @@ class MainScaffold extends StatelessWidget {
         context.go('/journal');
         break;
       case 2:
-        context.go('/exercises');
+        context.go('/calendar');
         break;
       case 3:
+        context.go('/exercises');
+        break;
+      case 4:
         context.go('/resources');
         break;
     }
@@ -53,6 +59,10 @@ class MainScaffold extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(LucideIcons.bookOpen),
             label: 'Journal',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(LucideIcons.calendarClock),
+            label: 'Calendrier',
           ),
           BottomNavigationBarItem(
             icon: Icon(LucideIcons.brainCircuit),

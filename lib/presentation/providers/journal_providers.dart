@@ -1,5 +1,6 @@
 import 'package:cnv_coach/data/models/journal_entry.dart';
 import 'package:cnv_coach/data/services/journal_service.dart';
+import 'package:cnv_coach/presentation/providers/calendar_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Ce provider expose l'instance du JournalService.
@@ -11,8 +12,9 @@ final journalServiceProvider = Provider<JournalService>((ref) {
 // StateNotifier pour gérer la liste des entrées du journal
 class JournalEntriesNotifier extends StateNotifier<List<JournalEntry>> {
   final JournalService _journalService;
+  final Ref _ref;
 
-  JournalEntriesNotifier(this._journalService) : super([]) {
+  JournalEntriesNotifier(this._journalService, this._ref) : super([]) {
     // Charger les entrées initiales lors de la création du notifier
     loadEntries();
   }
@@ -32,6 +34,9 @@ class JournalEntriesNotifier extends StateNotifier<List<JournalEntry>> {
   /// Supprime une entrée et met à jour l'état.
   Future<void> deleteEntry(String id) async {
     await _journalService.deleteEntry(id);
+    await _ref
+        .read(calendarEventsProvider.notifier)
+        .clearLinksForJournalEntry(id);
     // On rafraîchit aussi la liste après une suppression.
     loadEntries();
   }
@@ -47,5 +52,5 @@ class JournalEntriesNotifier extends StateNotifier<List<JournalEntry>> {
 final journalEntriesProvider =
     StateNotifierProvider<JournalEntriesNotifier, List<JournalEntry>>((ref) {
   final journalService = ref.watch(journalServiceProvider);
-  return JournalEntriesNotifier(journalService);
+  return JournalEntriesNotifier(journalService, ref);
 });

@@ -1,3 +1,4 @@
+import 'package:cnv_coach/data/models/calendar_event.dart';
 import 'package:cnv_coach/data/models/journal_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import 'package:cnv_coach/presentation/providers/calendar_providers.dart';
+import 'package:cnv_coach/presentation/screens/calendar/calendar_event_form_screen.dart';
 import 'package:cnv_coach/presentation/providers/journal_providers.dart';
 
 class JournalDetailScreen extends ConsumerWidget {
@@ -19,6 +22,12 @@ class JournalDetailScreen extends ConsumerWidget {
       (item) => item.id == entry.id,
       orElse: () => entry,
     );
+    final calendarEvents = ref.watch(calendarEventsProvider);
+    final linkedEvents = calendarEvents
+        .where(
+          (event) => event.linkedJournalEntryId == currentEntry.id,
+        )
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -73,6 +82,8 @@ class JournalDetailScreen extends ConsumerWidget {
             content: currentEntry.demand,
             icon: Icons.record_voice_over_outlined,
           ),
+          if (linkedEvents.isNotEmpty)
+            _buildLinkedEventsCard(context, linkedEvents),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => context.go('/journal'),
@@ -121,6 +132,45 @@ class JournalDetailScreen extends ConsumerWidget {
             Text(content, style: Theme.of(context).textTheme.bodyLarge),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildLinkedEventsCard(
+    BuildContext context,
+    List<CalendarEvent> events,
+  ) {
+    final dateFormat = DateFormat.yMMMd('fr_FR');
+    final timeFormat = DateFormat.Hm('fr_FR');
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.event_available),
+            title: const Text('Actions planifiées liées'),
+            subtitle: const Text('Touchez une action pour ouvrir sa fiche.'),
+          ),
+          const Divider(height: 0),
+          ...events.map(
+            (event) => ListTile(
+              title: Text(event.title),
+              subtitle: Text(
+                '${dateFormat.format(event.scheduledAt)} · ${timeFormat.format(event.scheduledAt)}'
+                '${event.isRecurring ? ' · Répétition tous les ${event.repeatIntervalDays} jours' : ''}',
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                context.push(
+                  '/calendar/event',
+                  extra: CalendarEventFormConfig(initialEvent: event),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
