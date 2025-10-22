@@ -23,13 +23,17 @@ class JournalEntryAdapter extends TypeAdapter<JournalEntry> {
       feelings: (fields[3] as List).cast<String>(),
       need: fields[4] as String,
       demand: fields[5] as String,
+      selfReflection: fields.containsKey(6) ? fields[6] as String? : null,
+      otherReflection: fields.containsKey(7) ? fields[7] as String? : null,
+      actions:
+          (fields[8] as List?)?.map((dynamic e) => e as String).toList() ?? const [],
     );
   }
 
   @override
   void write(BinaryWriter writer, JournalEntry obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +45,13 @@ class JournalEntryAdapter extends TypeAdapter<JournalEntry> {
       ..writeByte(4)
       ..write(obj.need)
       ..writeByte(5)
-      ..write(obj.demand);
+      ..write(obj.demand)
+      ..writeByte(6)
+      ..write(obj.selfReflection)
+      ..writeByte(7)
+      ..write(obj.otherReflection)
+      ..writeByte(8)
+      ..write(obj.actions);
   }
 
   @override

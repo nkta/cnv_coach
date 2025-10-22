@@ -20,8 +20,11 @@ class NotificationService {
 
     tz.initializeTimeZones();
 
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-    final initSettings = InitializationSettings(android: androidInit);
+    const initSettings = InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(),
+      macOS: DarwinInitializationSettings(),
+    );
 
     await _plugin.initialize(initSettings);
 
@@ -95,8 +98,6 @@ class NotificationService {
         tzTime,
         details,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
         payload: event.id,
       );
     } catch (error, stackTrace) {
