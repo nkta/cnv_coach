@@ -24,10 +24,12 @@ class JournalDetailScreen extends ConsumerWidget {
     );
     final calendarEvents = ref.watch(calendarEventsProvider);
     final linkedEvents = calendarEvents
-        .where(
-          (event) => event.linkedJournalEntryId == currentEntry.id,
-        )
+        .where((event) => event.linkedJournalEntryId == currentEntry.id)
         .toList();
+    final hasReportSection =
+        ((currentEntry.selfReflection ?? '').isNotEmpty) ||
+        ((currentEntry.otherReflection ?? '').isNotEmpty) ||
+        currentEntry.actions.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +43,9 @@ class JournalDetailScreen extends ConsumerWidget {
               await Clipboard.setData(ClipboardData(text: copiedContent));
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Entrée copiée dans le presse-papiers.')),
+                  const SnackBar(
+                    content: Text('Entrée copiée dans le presse-papiers.'),
+                  ),
                 );
               }
             },
@@ -82,6 +86,7 @@ class JournalDetailScreen extends ConsumerWidget {
             content: currentEntry.demand,
             icon: Icons.record_voice_over_outlined,
           ),
+          if (hasReportSection) _buildSectionHeader(context, 'Compte rendu'),
           if ((currentEntry.selfReflection ?? '').isNotEmpty)
             _buildDetailCard(
               context,
@@ -102,7 +107,8 @@ class JournalDetailScreen extends ConsumerWidget {
             _buildLinkedEventsCard(context, linkedEvents),
           const SizedBox(height: 24),
           FilledButton.icon(
-            onPressed: () => context.push('/journal/report', extra: currentEntry),
+            onPressed: () =>
+                context.push('/journal/report', extra: currentEntry),
             icon: const Icon(Icons.note_alt_outlined),
             label: const Text('Mettre à jour le compte rendu'),
           ),
@@ -156,7 +162,35 @@ class JournalDetailScreen extends ConsumerWidget {
     return buffer.toString().trim();
   }
 
-  Widget _buildDetailCard(BuildContext context, {required String title, required String content, required IconData icon}) {
+  Widget _buildSectionHeader(BuildContext context, String label) {
+    final theme = Theme.of(context);
+    final dividerColor = theme.colorScheme.primary.withOpacity(0.35);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(child: Divider(color: dividerColor)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              label,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Expanded(child: Divider(color: dividerColor)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailCard(
+    BuildContext context, {
+    required String title,
+    required String content,
+    required IconData icon,
+  }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
@@ -189,7 +223,10 @@ class JournalDetailScreen extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.flag_outlined, color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.flag_outlined,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'Actions à entreprendre',
